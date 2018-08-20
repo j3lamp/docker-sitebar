@@ -9,6 +9,9 @@ term_handler() {
   exit 143; # 128 + 15 -- SIGTERM
 }
 
+# fix permissions
+chown -R sitebar:sitebar /config
+
 # run application
 echo "Starting supervisord..."
 exec /usr/bin/supervisord -c /etc/supervisord.conf
