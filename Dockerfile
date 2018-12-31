@@ -41,9 +41,9 @@ RUN set -ex \
   && addgroup -g ${GID} sitebar \
   && adduser -u ${UID} -h /opt/sitebar -H -G sitebar -s /sbin/nologin -D sitebar \
   && mkdir -p /opt \
-# Download SiteBar v3.6 plus fixes
+# Download SiteBar v3.6 plus fixes and adjustments
   && cd /tmp \
-  && SITEBAR_ZIP_URL="https://github.com/brablc/sitebar/archive/791268b15cb50c29addde58793aac51eccf72878.zip" \
+  && SITEBAR_ZIP_URL="https://github.com/j3lamp/sitebar/archive/33c7dd96c3d3e31f6cbbc2769e013d36b18c109a.zip" \
   && wget -q "${SITEBAR_ZIP_URL}" \
 # Extract
   && unzip 791268b15cb50c29addde58793aac51eccf72878.zip -d /opt \
