@@ -14,43 +14,44 @@ LABEL maintainer="John Lamp" \
 ARG UID=1502
 ARG GID=1502
 
-RUN set -ex \
-  && apk update \
-  && apk upgrade \
-  && apk add \
-    alpine-sdk \
-    autoconf \
-    bash \
-    nginx \
-    postgresql-dev \
-    postgresql-libs \
-    supervisor \
-    tini \
-    wget \
+RUN set -ex                                                                         \
+  && apk update                                                                     \
+  && apk upgrade                                                                    \
+  && apk add                                                                        \
+    alpine-sdk                                                                      \
+    autoconf                                                                        \
+    bash                                                                            \
+    nginx                                                                           \
+    postgresql-dev                                                                  \
+    postgresql-libs                                                                 \
+    supervisor                                                                      \
+    tini                                                                            \
+    wget                                                                            \
 # PHP Extensions
-  && docker-php-ext-install mysqli opcache pdo_mysql pdo_pgsql pgsql \
-  && pecl install APCu-5.1.11 \
-  && docker-php-ext-enable apcu \
+  && docker-php-ext-install mysqli opcache pdo_mysql pdo_pgsql pgsql                \
+  && pecl install APCu-5.1.11                                                       \
+  && docker-php-ext-enable apcu                                                     \
 # Remove dev packages
-  && apk del \
-    alpine-sdk \
-    autoconf \
-    postgresql-dev \
-  && rm -rf /var/cache/apk/* \
+  && apk del                                                                        \
+    alpine-sdk                                                                      \
+    autoconf                                                                        \
+    postgresql-dev                                                                  \
+  && rm -rf /var/cache/apk/*                                                        \
 # Add user for sitebar
-  && addgroup -g ${GID} sitebar \
-  && adduser -u ${UID} -h /opt/sitebar -H -G sitebar -s /sbin/nologin -D sitebar \
-  && mkdir -p /opt \
+  && addgroup -g ${GID} sitebar                                                     \
+  && adduser -u ${UID} -h /opt/sitebar -H -G sitebar -s /sbin/nologin -D sitebar    \
+  && mkdir -p /opt                                                                  \
 # Download SiteBar v3.6 plus fixes and adjustments
-  && cd /tmp \
-  && SITEBAR_ZIP_URL="https://github.com/j3lamp/sitebar/archive/33c7dd96c3d3e31f6cbbc2769e013d36b18c109a.zip" \
-  && wget -q "${SITEBAR_ZIP_URL}" \
+  && cd /tmp                                                                        \
+  && COMMIT_HASH="33c7dd96c3d3e31f6cbbc2769e013d36b18c109a"                         \
+  && SITEBAR_ZIP_URL="https://github.com/j3lamp/sitebar/archive/${COMMIT_HASH}.zip" \
+  && wget -q "${SITEBAR_ZIP_URL}"                                                   \
 # Extract
-  && unzip 791268b15cb50c29addde58793aac51eccf72878.zip -d /opt \
-  && mv /opt/sitebar-791268b15cb50c29addde58793aac51eccf72878 /opt/sitebar \
-  && rm -Rf /opt/sitebar/adm \
-  && mkdir /config \
-  && ln -s /config /opt/sitebar/adm \
+  && unzip ${COMMIT_HASH}.zip -d /opt                                               \
+  && mv /opt/sitebar-${COMMIT_HASH} /opt/sitebar                                    \
+  && rm -Rf /opt/sitebar/adm                                                        \
+  && mkdir /config                                                                  \
+  && ln -s /config /opt/sitebar/adm                                                 \
 # Clean up
   && rm -rf /tmp/* /root/.gnupg /var/www/*
 
